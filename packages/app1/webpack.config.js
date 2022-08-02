@@ -55,6 +55,8 @@ const serverConfig = {
   stats: { errorDetails: true },
   devServer: {
     writeToDisk: true,
+    port: 8083,
+    contentBase: "dist",
   },
 };
 

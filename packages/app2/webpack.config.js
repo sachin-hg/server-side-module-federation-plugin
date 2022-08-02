@@ -3,7 +3,7 @@ const path = require("path");
 const ServerSideModuleFederationPlugin = require("server-side-module-federation-plugin");
 
 const exposes = {
-  "./Shared": "./src/Shared",
+  "./shared": "./src/shared",
 };
 
 const shared = { react: { singleton: true }, "react-dom": { singleton: true } };
@@ -80,6 +80,7 @@ const clientConfig = {
     new webpack.container.ModuleFederationPlugin({
       name: "app2",
       exposes,
+      shared
     }),
   ],
 };

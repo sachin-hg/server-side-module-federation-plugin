@@ -7,8 +7,8 @@
   "scripts": {
     "build": "webpack",
     "start:webpack": "webpack -w",
-    "start:server": "nodemon src/server.cjs",
-    "start": "concurrently \"npm:start:webpack\" \"npm:start:server\"",
+    "start:server": "nodemon --inspect-brk src/server.cjs",
+    "start": "npm run start:webpack",
     "test": "node test.js"
   },
   "dependencies": {
