@@ -2,8 +2,11 @@ const map = {
   app2: 'http://localhost:8080/server/app2.js',
   app3: 'http://localhost:8081/server/app3.js'
 }
+const cache = {}
 const load = (url) => {
-  global.__message = function(abc) {return abc};
+  if (cache[url]) {
+    return cache[url]
+  }
   /******/ 			console.log(url, '3345234523');return new Promise((resolve, reject) => {
     const req = __non_webpack_require__
     /******/ 				var filename = req("path").basename(url);
@@ -25,14 +28,14 @@ const load = (url) => {
           /******/ 							req("vm").runInThisContext("(function(exports, require, module, __filename, __dirname){"+content+"}\n)", filename)(
             /******/ 								chunk.exports,req,chunk,req("path").dirname(filename),filename
             /******/ 							);
+          cache[url] = chunk.exports;
           /******/ 							resolve(chunk.exports);
           /******/ 						}
         /******/ 					});
       /******/ 				});
     /******/ 			})
   /******/ 		}
-function loadComponent (scope, module) {
-  return async () => {
+async function loadComponent (scope, module) {
     // Initializes the share scope. This fills it with known provided modules from this build and all remotes
     /* eslint no-undef:off */
     await __webpack_init_sharing__('default')
@@ -42,9 +45,11 @@ function loadComponent (scope, module) {
     await container.init(__webpack_share_scopes__.default)
     const factory = await container.get(module)
     const Module = factory()
+    console.log(Module)
     return Module
-  }
 }
+
+global.loadComponent = loadComponent
 
 const test = async (req, res) => {
   const scope = req.path.includes('app2') ? 'app2' : 'app3'
@@ -55,8 +60,10 @@ export default async function initRenderMiddleware(app) {
   app.get('/app/:type', test)
   app.get("/*", async (req, res, next) => {
     // always refresh the renderer implementation
-    const { html } = (await import("./renderer")).default();
+    (await import("./renderer")).default(req, res);
     delete require.cache[require.resolve("./renderer")];
-    res.send(html);
   });
 }
+
+
+// lazy(() => loadComponent())
