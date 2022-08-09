@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "start:webpack": "webpack -w",
-    "start:server": "nodemon --inspect-brk src/server.cjs",
+    "start:webpack": "webpack serve",
+    "start:server": "nodemon src/server.cjs",
     "start": "npm run start:webpack",
     "test": "node test.js"
   },

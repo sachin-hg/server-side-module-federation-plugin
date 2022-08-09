@@ -41,14 +41,14 @@ const serverConfig = {
     path: path.join(__dirname, "dist/server"),
     libraryTarget: "commonjs-module",
     chunkLoading: "async-http-node",
-    publicPath: "http://localhost:3000/server/",
+    publicPath: "http://localhost:8083/server/",
   },
   target: "node",
   plugins: [
     new ServerSideModuleFederationPlugin({
       name: "app1",
       library: { type: "commonjs-module" },
-      remotes: remotes("server"),
+      // remotes: remotes("server"),
       shared,
     }),
   ],
@@ -83,12 +83,12 @@ const clientConfig = {
   plugins: [
     new webpack.container.ModuleFederationPlugin({
       name: "app1",
-      remotes: remotes("client"),
+      // remotes: remotes("client"),
       shared,
     }),
-    new HtmlWebpackPlugin({
-      template: "index.ejs",
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: "index.ejs",
+    // }),
   ],
   stats: { errorDetails: true },
 };
